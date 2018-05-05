@@ -14,14 +14,14 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body class="text-center">
-<form class="form-signin">
-    <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+<form class="form-signin" action="check.php" method="post">
+    <img class="mb-4" src="img/logo.svg" alt="" width="116" height="80">
     <h1 class="h3 mb-3 font-weight-normal">Укажите имя сайта</h1>
-    <label for="inputEmail" class="sr-only">Domain name</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Domain name" required autofocus>
+    <label for="inputDomain" class="sr-only">Domain name</label>
+    <input type="text" id="inputDomain" name="Domain" class="form-control" placeholder="Domain name" required autofocus>
     </div>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Проверить</button>
-    <p class="mt-5 mb-3 text-muted">&copy; Web Optimizer ver.6 2018</p>
+    <p class="mt-5 mb-3 text-muted">&copy; Web Optimizer ver.6, 2018</p>
 </form>
 </body>
 </html>
