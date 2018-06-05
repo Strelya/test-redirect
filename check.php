@@ -17,44 +17,40 @@ $domain_clear = str_replace($sumb, "", htmlspecialchars($_POST['Domain']));
 $domain_plus = array("http://", "https://", "http://www.", "https://www.");//
 $http_header=0;//Надо подсчитать сколько 200/401/500 и выдавать рекомендацию.
 $code502 = @get_headers($domain_plus[0].$domain_clear, 1);
-
+    echo "<ul class=\"list-group\">";
 if ($code502==true) {
     foreach ($domain_plus as $value) {
         $url = $value.$domain_clear;
-        //Alternative method, file_get_contents
-        //file_get_contents($url, null, stream_context_create(['http' => ['method' => 'GET']]));
-        //$code = $http_response_header[0];
-        //echo $url." - ".$code;
-        $code = get_headers($url, 1);
+        @file_get_contents($url, null, stream_context_create(['http' => ['method' => 'GET']]));
+        $code = $http_response_header[0];
 
-        switch ($code[0]) {
+        switch ($code) {
             case 'HTTP/1.1 200 OK':
                 $http_header++;
-                echo $url . " - 200";
-                echo "<br/>";
+                echo "<li class=\"list-group-item\">Версия с ".$value."(<b>".$url."</b>) - Открывается (HTTP/1.1 200 OK)</li>";
                 break;
             case 'HTTP/1.1 301 Moved Permanently':
-                echo $url . " - 301";
+                echo "<li class=\"list-group-item\">Версия с ".$value."(<b>".$url."</b>) - Редирект (HTTP/1.1 301 Moved Permanently)";
                 echo "<br/>";
+                echo "(Редирект на ".str_replace("Location: ","", $http_response_header[5]).")</li>";
                 break;
             case 'HTTP/1.1 401 Unauthorized':
                 $http_header++;
-                echo $url . " - " . $code[0];
-                echo "<br/>";
+                echo "<li class=\"list-group-item\">Версия с ".$value."(<b>".$url."</b>) - Доступ на сайт запрещен (HTTP/1.1 401 Unauthorized)</li>";
                 break;
-            case '500'://Создать ошибку, протестить
-                echo $url . " - " . $code[0];
-                echo "<br/>";
+            case 'HTTP/1.1 500 Internal Server Error'://Создать ошибку, протестить
+                $http_header++;
+                echo "<li class=\"list-group-item\">Версия с ".$value."(<b>".$url."</b>) - Ошибка на сайте (HTTP/1.1 500 Internal Server Error)</li>";
                 break;
         }
-    };
-
-if ($http_header>1){
-    echo "Необходимо настроить редирект на одно зеркало";
-}
-else {
-    echo "Все отлично, главное зеркало настроено";
-}
+     };
+    echo "</ul>";
+    if ($http_header>1){
+        echo "<br/>Необходимо настроить редирект на одно зеркало";
+    }
+    else {
+        echo "<br/>Все отлично, главное зеркало настроено";
+    }
 }
 else {
     echo "Сайт не зарегистрирован или не размещен на сервере";
