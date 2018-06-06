@@ -13,15 +13,30 @@
     <!-- Custom styles for this template -->
     <link href="style.css" rel="stylesheet">
 </head>
+<?php include_once("check.php"); ?>
+
 <body class="text-center">
-<form class="form-signin" action="check.php" method="post">
+<div class="container">
+    <form class="form-signin" action="" method="post">
     <img class="mb-4" src="img/logo.svg" alt="" width="116" height="80">
     <h1 class="h3 mb-3 font-weight-normal">Укажите имя сайта</h1>
     <label for="inputDomain" class="sr-only">Domain name</label>
-    <input type="text" id="inputDomain" name="Domain" class="form-control" placeholder="Domain name" required autofocus>
-    </div>
+    <?php
+    if(isset($_REQUEST['Domain']))
+    { ?>
+        <input type="text" id="inputDomain" name="Domain" class="form-control" required autofocus value="<?=$_POST["Domain"]?>">
+
     <button class="btn btn-lg btn-primary btn-block" type="submit">Проверить</button>
-    <p class="mt-5 mb-3 text-muted">&copy; Web Optimizer ver.6, 2018</p>
-</form>
+
+        <?php echo check_redirect ($_POST["Domain"]);?>
+
+    <?php } else { ?>
+        <input type="text" id="inputDomain" name="Domain" class="form-control" placeholder="Domain name" required autofocus>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Проверить</button>
+    <?php
+    }
+    ?>
+    </form>
+</div>
 </body>
 </html>
